@@ -9,9 +9,23 @@ const resultSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Quiz'
   },
-  answer: { type: [[String]], required: true }, // Updated to allow nested arrays of strings
+  answers: [
+    {
+      question: {
+        type: String,
+        required: true
+      },
+      selectedOptionId: {
+        type: [String],
+        required: true
+      },
+      isCorrect: {
+        type: Boolean,
+        required: true
+      }
+    }
+  ],
   score: {
-    
     type: Number,
     required: true
   }

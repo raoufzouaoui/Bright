@@ -1,84 +1,77 @@
-const Quiz = require('../models/quiz3');
+// Import the required models
+const Quiz3 = require('../models/quiz3');
 const Result = require('../models/result');
 
-const resultSubmit = async (req, res) => {
-  const { quiz: quizId, questions, answer } = req.body;
+// Route handler to handle the submission of user answers
+const submitAnswer = async (req, res) => {
+  try {
+    const { quiz: quizId, answers } = req.body;
 
-  // Fetch the quiz from the database
-  const quiz = await Quiz.findById(quizId);
-  if (!quiz) {
-    res.status(404).json({ error: 'Quiz not found' });
-    return;
-  }
-
-  let score = 0;
-  const response = [];
-
-  for (let i = 0; i < questions.length; i++) {
-    const questionId = questions[i];
-    const userAnswer = answer[i];
-
-    // Find the question in the quiz based on questionId
-    const question = quiz.questions.find((q) => q._id.toString() === questionId);
-
-    if (!question) {
-      res.status(404).json({ error: 'Question not found' });
-      return;
+    // Fetch the quiz from the database
+    const quiz = await Quiz3.findById(quizId);
+    if (!quiz) {
+      return res.status(404).json({ error: 'Quiz not found' });
     }
 
-    const correctAnswer = question.answer;
-    const isCorrect = compareAnswers(userAnswer, correctAnswer);
-    if(isCorrect)
-      score +=1;
+    // Calculate the score and create the response array
+    let score = 0;
+    const response = [];
 
-    response.push({
-      isCorrect,
-      correctAnswer,
+    for (const answer of answers) {
+      const { questionId, selectedOptionId } = answer;
+      const selectedOptionIds = answers.map((answer) => answer.selectedOptionId);
+      console.log(selectedOptionIds)
+      // Find the question in the quiz based on questionId
+      const question = quiz.questions.find((q) => q._id.toString() === questionId);
+      if (!question) {
+        return res.status(404).json({ error: 'Question not found' });
+      }
+
+      const correctOrder = question.options.map((option) => option.id);
+      
+      let isCorrect = true;
+      for (let i = 0; i < selectedOptionIds.length; i++) {
+        if (selectedOptionIds[i] === correctOrder[i]) {
+          isCorrect = true;
+          score += 1;
+        }else{
+          isCorrect = false;
+        }
+        console.log(selectedOptionIds[i],"    ",correctOrder[i])
+         response.push({
+          question: question.question,
+          selectedOptionId:selectedOptionIds[i],
+          isCorrect,
+        });
+      }
+      break;
+      // if (isCorrect && selectedOptionId.length === correctOrder.length) {
+      //   score += 1;
+      // }
+
+      // Add the response for this question to the array
+      
+    }
+
+    // Create a new result document
+    const result = new Result({
+      user: req.user, // Assuming you have user authentication
+      quiz: quiz._id,
+      answers: response,
+      score,
     });
+
+    // Save the result to the database
+    await result.save();
+
+    // Send the response back to the client
+    res.status(200).json({ score, response });
+  } catch (error) {
+    console.error('Error submitting answer:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  const result = new Result({
-    user: req.user,
-    quiz: quiz._id,
-    answer,
-    score,
-  });
-
-  await result.save();
-  res.status(200).json(response);
-};
-
-const compareAnswers = (userAnswer, correctAnswer) => {
-  if (userAnswer.length !== correctAnswer.length) {
-    return false;
-  }
-
-  for (let i = 0; i < userAnswer.length; i++) {
-    const userSubAnswer = userAnswer[i];
-    const correctSubAnswer = correctAnswer[i];
-
-    if (!arrayEquals(userSubAnswer, correctSubAnswer)) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
-const arrayEquals = (array1, array2) => {
-  if (array1.length !== array2.length) {
-    return false;
-  }
-
-  for (let i = 0; i < array1.length; i++) {
-    if (array1[i] !== array2[i]) {
-      return false;
-    }
-  }
-
-  return true;
 };
 
 module.exports = {
-  resultSubmit,
+  submitAnswer,
 };

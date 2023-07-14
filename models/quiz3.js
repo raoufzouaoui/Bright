@@ -2,15 +2,26 @@ const mongoose = require('mongoose');
 
 // quiz type order
 
-const questionSchema  = new mongoose.Schema({
-  question: [{
+const optionSchema = new mongoose.Schema({
+  id: {
     type: String,
     required: true
-  }],
-  answer: [{
-    type: Number,
+  },
+  sentence: {
+    type: String,
     required: true
-  }],
+  }
+});
+
+const questionSchema = new mongoose.Schema({
+  question: {
+    type: String,
+    required: true
+  },
+  options: {
+    type: [optionSchema],
+    required: true
+  }
 });
 
 const quizSchema = new mongoose.Schema({

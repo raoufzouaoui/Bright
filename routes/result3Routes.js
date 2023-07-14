@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 
 const { 
-    resultSubmit
+    submitAnswer
 } = require('../controllers/result3Controllers');
 
-router.route('/').post(resultSubmit)
+router.route('/').post(submitAnswer)
 
 module.exports = router 
