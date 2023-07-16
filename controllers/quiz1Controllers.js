@@ -1,4 +1,4 @@
-const Quiz = require('../models/quiz1')
+const Quiz = require('../models/quiz')
 // const asyncWrapper = require('../middleware/async')
 
 

@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const resultSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   quiz: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Quiz'
+    ref: 'Quiz',
+    required: true
   },
   answers: [
     {
@@ -17,17 +19,14 @@ const resultSchema = new mongoose.Schema({
       },
       selectedOptionId: {
         type: [String],
-        required: true
       },
       isCorrect: {
         type: Boolean,
-        required: true
       }
     }
   ],
   score: {
     type: Number,
-    required: true
   }
 });
 

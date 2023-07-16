@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-// quiz type order
-
 const optionSchema = new mongoose.Schema({
   id: {
     type: String,
@@ -18,8 +16,14 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  options: {
-    type: [optionSchema],
+  options: [optionSchema],
+  answer: [{
+    type: mongoose.Schema.Types.Mixed,
+  }],
+  type: {
+    type: String,
+    enum: ['checkbox', 'text', 'order', 'paragraph'],
+    required: true
   }
 });
 
@@ -32,9 +36,9 @@ const quizSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  questions: [questionSchema],
+  questions: [questionSchema]
 });
 
-const Quiz3 = mongoose.model('Quiz3', quizSchema);
+const Quiz = mongoose.model('Quiz', quizSchema);
 
-module.exports = Quiz3;
+module.exports = Quiz;

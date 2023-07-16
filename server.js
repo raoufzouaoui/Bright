@@ -3,9 +3,12 @@ const app = express()
 const quiz = require('./routes/quiz1Routes.js')
 const quiz2 = require('./routes/quiz2Routes.js')
 const quiz3 = require('./routes/quiz3Routes.js')
+const quiz4 = require('./routes/quiz4Routes.js')
 const result1 = require('./routes/result1Routes.js')
 const result2 = require('./routes/result2Routes.js')
 const result3 = require('./routes/result3Routes.js')
+const result4 = require('./routes/result4Routes.js')
+const result = require('./routes/resultRoutes.js')
 const course = require('./routes/courseRoutes.js')
 const cors = require('cors');
 const connectDB = require('./db/connect');
@@ -22,10 +25,13 @@ app.use(cors());
 app.use('/api/v1/Quiz', quiz) // that's going to be that root route for the tasks router
 app.use('/api/v1/Quiz2', quiz2)
 app.use('/api/v1/Quiz3', quiz3)
+app.use('/api/v1/Quiz4', quiz4)
 app.use('/api/v1/Quiz3/reorder', quiz3)
 app.use('/api/v1/Quiz1/submit', result1)
 app.use('/api/v1/Quiz2/submit', result2)
 app.use('/api/v1/Quiz3/submit', result3)
+app.use('/api/v1/Quiz/submit', result)
+app.use('/api/v1/Quiz4/submit', result4)
 app.use('/api/v1/course', course)
 const port = 3000
 
