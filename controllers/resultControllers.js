@@ -57,14 +57,33 @@ const resultSubmit = async (req, res) => {
     score,
   });
   console.log(result)
+
   try {
     await result.validate();
     await result.save();
-    res.status(200).json(response);
+
+    // Check if all answers are correct to determine if the user passed the quiz
+    const passed = response.every(answer => answer.isCorrect);
+    if (passed) {
+      // Proceed to the next video or perform the desired action
+      res.status(200).json({ passed: true, message: 'Congratulations! You passed the quiz.' });
+    } else {
+      // Quiz needs to be repeated to get all correct answers
+      res.status(200).json({ passed: false, message: 'Sorry, you did not pass the quiz. Please try again.' });
+    }
   } catch (error) {
     console.error('Error submitting answer:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
+
+  // try {
+  //   await result.validate();
+  //   await result.save();
+  //   res.status(200).json(response);
+  // } catch (error) {
+  //   console.error('Error submitting answer:', error);
+  //   res.status(500).json({ error: 'Internal server error' });
+  // }
 };
 
 
