@@ -8,7 +8,7 @@ const {
     updateQuiz,
     deleteQuiz,
     editQuiz
-} = require('../controllers/quiz1Controllers')
+} = require('../controllers/quizControllers')
 
 router.route('/').get(getAllQuiz).post(createQuiz)
 router.route('/:id').get(getQuiz).patch(updateQuiz).delete(deleteQuiz).put(editQuiz)

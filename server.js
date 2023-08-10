@@ -10,6 +10,10 @@ const result3 = require('./routes/result3Routes.js')
 const result4 = require('./routes/result4Routes.js')
 const result = require('./routes/resultRoutes.js')
 const course = require('./routes/courseRoutes.js')
+const flouci = require('./routes/flouciRoutes.js')
+const stripe = require('./routes/stripeRoutes.js')
+const paypal = require('./routes/paypalRoutes.js')
+
 const cors = require('cors');
 const connectDB = require('./db/connect');
 const { connect } = require('mongoose');
@@ -22,7 +26,7 @@ app.use(express.json()) // if we don't use this then we win't have that data in 
 
 //routes
 app.use(cors());
-app.use('/api/v1/Quiz', quiz) // that's going to be that root route for the tasks router
+app.use('/api/v1/Quiz', quiz) 
 app.use('/api/v1/Quiz2', quiz2)
 app.use('/api/v1/Quiz3', quiz3)
 app.use('/api/v1/Quiz4', quiz4)
@@ -33,6 +37,10 @@ app.use('/api/v1/Quiz3/submit', result3)
 app.use('/api/v1/Quiz/submit', result)
 app.use('/api/v1/Quiz4/submit', result4)
 app.use('/api/v1/course', course)
+app.use('/api/v1/flouciPayment', flouci)
+app.use('/api/v1/stripePayment', stripe)
+app.use('/api/v1/paypalPayment', paypal)
+
 const port = 3000
 
 const start = async () =>{

@@ -9,8 +9,12 @@ const videoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  url: {
+    type: String,
+    required: true,
+  },
 });
 
-const Video = mongoose.model('Video', videoSchema);
+const Video = mongoose.model('videos', videoSchema);
 
 module.exports = Video;
